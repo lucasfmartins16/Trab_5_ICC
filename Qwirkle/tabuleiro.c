@@ -87,10 +87,10 @@ void print_tabuleiro(Peca **matriz, int m, int n){
 
   //Numeros das colunas
 	for(k = 0; k < n; k++){
-    if(k+1 < 10){
+    if(k+1 <= 10){
       printf("  %d  ", k);	
     }else{
-      printf("  %d  ", k);
+      printf(" %d  ", k);
     }
 	}
 	
@@ -99,7 +99,7 @@ void print_tabuleiro(Peca **matriz, int m, int n){
 	for(i = 0; i < m; i++){
 
 		//Numeros das linhas
-		if(i+1 < 10){
+		if(i+1 <= 10){
 		  printf("%d - ", i);
 		}else{
 		  printf("%d- ", i);
