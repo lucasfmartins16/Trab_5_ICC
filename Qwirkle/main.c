@@ -6,23 +6,8 @@
 
 int main(void) {
   //mensagem de inicialização do programa
-  printf("\n");
-  printf("\033[4m");
-  printf("Q");
-  printf("\033[4;31m");
-  printf("W");
-  printf("\033[4;32m");
-  printf("I");
-  printf("\033[4;33m");
-  printf("R");
-  printf("\033[4;34m");
-  printf("K");
-  printf("\033[4;35m");
-  printf("L");
-  printf("\033[4;36m");
-  printf("E");
-  printf("\033[0m");
-  printf("\n\n");
+  inicio();
+
   //Numero de jogadores
   int num_jog;
   char e[10];
@@ -78,9 +63,6 @@ int main(void) {
 
   //Alocar o tabuleiro na heap
   Peca **matriz = aloca_tabuleiro(n_linhas, n_colunas);
-
-  //Preencher o tabuleiro com espacos
-  fill_tabuleiros(matriz, n_linhas, n_colunas, ' ');
 
   //Imprimir o tabuleiro em sua configuracao inicial
   print_tabuleiro(matriz, n_linhas, n_colunas);

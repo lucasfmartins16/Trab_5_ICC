@@ -6,6 +6,27 @@
 #include "dinamica.h"
 #include "pecas.h"
 
+//imprime uma mensagem indicando a inicialização do jogo
+void inicio(){
+  printf("\n");
+  printf("\033[4m");
+  printf("Q");
+  printf("\033[4;31m");
+  printf("W");
+  printf("\033[4;32m");
+  printf("I");
+  printf("\033[4;33m");
+  printf("R");
+  printf("\033[4;34m");
+  printf("K");
+  printf("\033[4;35m");
+  printf("L");
+  printf("\033[4;36m");
+  printf("E");
+  printf("\033[0m");
+  printf("\n\n");
+}
+
 //Pega uma string e retira todas as palavras, retornando uma matriz de strings.
 char** get_palavras(char *string, int *num){
   //Quantidade de palavras;
@@ -56,10 +77,12 @@ char** get_palavras(char *string, int *num){
 }
 
 //Imprimir a tela de jogada invalida.
-void jogada_invalida(){
+void jogada_invalida(Peca **matriz, int m, int n){
   printf("\n*****************\n");
   printf("Invalid move!");
-  printf("\n*****************\n\n");
+  printf("\n*****************\n");
+  print_tabuleiro(matriz, m, n);
+  printf("\n");
 }
 
 //Efetua uma jogada
@@ -67,7 +90,7 @@ Peca** jogada(Peca **matriz, int *m, int *n, Peca n_peca, int *c_x, int *c_y, in
 
   //Checa se a posicao escolhida existe no tabuleiro
   if(*c_x >= *m || *c_x < 0 || *c_y >= *n || *c_y < 0){
-    jogada_invalida();
+    jogada_invalida(matriz, *m, *n);
     return matriz;
   }
 
@@ -80,7 +103,7 @@ Peca** jogada(Peca **matriz, int *m, int *n, Peca n_peca, int *c_x, int *c_y, in
     }else if(ver(matriz, *c_x, *c_y, track, pos, 0)){
       *linha = 0;
     }else{
-      jogada_invalida();
+      jogada_invalida(matriz, *m, *n);
       return matriz;
     }
   }
@@ -88,14 +111,14 @@ Peca** jogada(Peca **matriz, int *m, int *n, Peca n_peca, int *c_x, int *c_y, in
   //Se o jogador ja tiver colocado duas pecas na rodada, deve-se verificar se ele esta jogando na mesma linha e coluna da jogada anterior.
   if(*pos > 1){
     if(!ver(matriz, *c_x, *c_y, track, pos, *linha)){
-      jogada_invalida();
+      jogada_invalida(matriz, *m, *n);
       return matriz;
     }
   }
 
   //Checar se a casa esta vazia.
   if(matriz[*c_x][*c_y].forma != ' '){
-    jogada_invalida();
+    jogada_invalida(matriz, *m, *n);
 
   }else{
     matriz[*c_x][*c_y].forma = n_peca.forma;
@@ -114,7 +137,7 @@ Peca** jogada(Peca **matriz, int *m, int *n, Peca n_peca, int *c_x, int *c_y, in
       //Desfazer a jogada, caso seja invalida.
       matriz[*c_x][*c_y].forma = ' ';
       matriz[*c_x][*c_y].cor = ' ';
-      jogada_invalida();
+      jogada_invalida(matriz, *m, *n);
     }
   }
   return matriz;
@@ -262,7 +285,7 @@ void menu(Peca **matriz, int *m, int *n, int num_jog, char **nomes, int cheatmod
       }
 
       if(!flag){
-        jogada_invalida();
+        jogada_invalida(matriz_, *m, *n);
       }else{
         //Converte as string da posicao para inteiros.
         c_x = atoi(palavra[2]);
@@ -305,13 +328,13 @@ void menu(Peca **matriz, int *m, int *n, int num_jog, char **nomes, int cheatmod
         }
       }
       if(!flag){
-        jogada_invalida();
+        jogada_invalida(matriz_, *m, *n);
       }else{
         flag_passar = 1;
       }
 
     }else{
-      jogada_invalida();
+      jogada_invalida(matriz_, *m, *n);
       flag_passar = 0;
     }
     
@@ -328,9 +351,10 @@ void menu(Peca **matriz, int *m, int *n, int num_jog, char **nomes, int cheatmod
       printf("\n***************\n");
       printf("Pontuacao na rodada: %d\n", pontos_rodada);
       printf("Pontuacao total: %d\n", pontos[turno]);
-      printf("***************\n\n");
+      printf("***************\n");
       pos = 0;
-
+      print_tabuleiro(matriz_, *m, *n);
+      printf("\n");
       //Completa as pecas do usuario, ate ele voltar a ter 6.
       puxar_pecas(pecas[turno], usadas);
 
@@ -339,6 +363,7 @@ void menu(Peca **matriz, int *m, int *n, int num_jog, char **nomes, int cheatmod
       if(turno == num_jog){
         turno = 0;
       }
+
     }
     free(palavra);
   }
